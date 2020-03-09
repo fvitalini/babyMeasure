@@ -1,13 +1,13 @@
 Package: babyMeasure
-Title: An Amazing Shiny App
+Title: Baby Measuraments Shiny App
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
+    person(given = "francesca",
+           family = "vitalini",
            role = c("aut", "cre"),
-           email = "your@email.com")
-Description: What the package does (one paragraph).
-License: What license is it under?
+           email = "francesca.vitalini@mirai-solutions.com")
+Description: An Amazing Shiny App to store and visualize measures about a baby.
+License: MIT + file LICENSE
 Imports: 
     config,
     golem,

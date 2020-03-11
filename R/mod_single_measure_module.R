@@ -9,7 +9,8 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import shinydashboard
-mod_single_measure_module_ui <- function(id, param){
+#' @import ggplot2
+mod_single_measure_module_ui <- function(id, param) {
   ns <- NS(id)
   tagList(
     br(),
@@ -31,7 +32,6 @@ mod_single_measure_module_ui <- function(id, param){
         title = "Data",
         status = colors_param[param],
         tableOutput(ns("table_output")),
-        verbatimTextOutput(ns("rawtable")),
         downloadButton(ns("downloadCsv"), "Download as CSV")
       )
     )
@@ -39,8 +39,9 @@ mod_single_measure_module_ui <- function(id, param){
 }
 
 #' single_measure_module Server Function
+#' @param data reactive dataset. as dataframe
 #' @noRd
-mod_single_measure_module_server <- function(input, output, session, param){
+mod_single_measure_module_server <- function(input, output, session, param, data){
   ns <- session$ns
   output$mean_today <- renderValueBox({
     valueBox(
@@ -66,6 +67,23 @@ mod_single_measure_module_server <- function(input, output, session, param){
       icon = icon("balance-scale-right")
     )
   })
+
+  output$plot_output <- renderPlot(
+    ggplot(data, aes(x = time, y = param)) +
+      geom_line() +
+      geom_point()
+  )
+
+  output$table_output <- renderDataTable(data)
+
+  output$downloadCsv <- downloadHandler(
+    filename = function() {
+      paste('data-', Sys.Date(), '.csv', sep = '')
+    },
+    content = function(con) {
+      write.csv(data, con)
+    }
+  )
 
 }
 

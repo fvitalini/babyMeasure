@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/fvitalini/babyMeasure.svg?branch=master)](https://travis-ci.org/fvitalini/babyMeasure)
+status](https://travis-ci.com/fvitalini/babyMeasure.svg?branch=master)](https://travis-ci.com/fvitalini/babyMeasure)
 <!-- badges: end -->
 
 The goal of babyMeasure is to …

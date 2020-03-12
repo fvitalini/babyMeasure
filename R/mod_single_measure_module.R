@@ -40,6 +40,8 @@ mod_single_measure_module_ui <- function(id, param) {
 
 #' single_measure_module Server Function
 #' @param data reactive dataset. as dataframe
+#' @importFrom stats time
+#' @importFrom utils write.csv
 #' @noRd
 mod_single_measure_module_server <- function(input, output, session, param, data){
   ns <- session$ns

@@ -5,6 +5,7 @@
 #' @import shiny
 #' @import shinydashboard
 #' @import dplyr
+#' @importFrom stats time
 #' @noRd
 app_server <- function(input, output, session) {
   dataset_name <- "fagiolina.rds"

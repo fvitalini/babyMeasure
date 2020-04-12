@@ -57,5 +57,5 @@ jobs:
         run: |
           account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)
           do.call(rsconnect::setAccountInfo, account_info)
-          rsconnect::deployApp(appName = "Covid19")
+          rsconnect::deployApp(appName = "babyMeasure")
         shell: Rscript {0}

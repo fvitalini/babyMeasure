@@ -24,13 +24,13 @@ mod_single_measure_module_ui <- function(id, param) {
       box(
         width = 8, solidHeader = TRUE,
         title = "Time evolution",
-        status = colors_param[param],
+        status = colors_param_status[param],
         plotOutput("plot_output", width = "100%", height = 600)
       ),
       box(
         width = 4,
         title = "Data",
-        status = colors_param[param],
+        status = colors_param_status[param],
         tableOutput(ns("table_output")),
         downloadButton(ns("downloadCsv"), "Download as CSV")
       )
@@ -49,7 +49,7 @@ mod_single_measure_module_server <- function(input, output, session, param, data
     valueBox(
       paste0("Today's ", param),
       1,
-      color = colors_param[param],
+      color = colors_param_status[param],
       icon = icon("balance-scale-right")
     )
   })
@@ -57,7 +57,7 @@ mod_single_measure_module_server <- function(input, output, session, param, data
     valueBox(
       paste0("Week's ", param),
       1,
-      color = colors_param[param],
+      color = colors_param_status[param],
       icon = icon("balance-scale-right")
     )
   })
@@ -65,7 +65,7 @@ mod_single_measure_module_server <- function(input, output, session, param, data
     valueBox(
       paste0("Month's ", param),
       1,
-      color = colors_param[param],
+      color = colors_param_status[param],
       icon = icon("balance-scale-right")
     )
   })

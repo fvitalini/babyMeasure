@@ -3,34 +3,33 @@
 #' @description A shiny Module.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
-#' @param param measure parameter. Character string
+#' @param param type of measure: weight, temperature, length
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList
-#' @import shinydashboard
+#' @import shiny
 #' @import ggplot2
 mod_single_measure_module_ui <- function(id, param) {
   ns <- NS(id)
   tagList(
     br(),
     fluidRow(
-      valueBoxOutput(ns("mean_today")),
-      valueBoxOutput(ns("mean_week")),
-      valueBoxOutput(ns("mean_month"))
+      mod_caseBoxes_ui(ns("mean_today")),
+      mod_caseBoxes_ui(ns("mean_week")),
+      mod_caseBoxes_ui(ns("mean_month"))
     ),
     br(),
     fluidRow(
-      box(
+      shinydashboard::box(
         width = 8, solidHeader = TRUE,
         title = "Time evolution",
-        status = colors_param[param],
+        status = colors_param_status[param],
         plotOutput("plot_output", width = "100%", height = 600)
       ),
-      box(
+      shinydashboard::box(
         width = 4,
         title = "Data",
-        status = colors_param[param],
+        status = colors_param_status[param],
         tableOutput(ns("table_output")),
         downloadButton(ns("downloadCsv"), "Download as CSV")
       )
@@ -39,44 +38,31 @@ mod_single_measure_module_ui <- function(id, param) {
 }
 
 #' single_measure_module Server Function
+#' @param param type of measure: weight, temperature, length
 #' @param data reactive dataset. as dataframe
 #' @importFrom stats time
 #' @importFrom utils write.csv
 #' @noRd
 mod_single_measure_module_server <- function(input, output, session, param, data){
   ns <- session$ns
-  output$mean_today <- renderValueBox({
-    valueBox(
-      paste0("Today's ", param),
-      1,
-      color = colors_param[param],
-      icon = icon("balance-scale-right")
-    )
-  })
-  output$mean_week <- renderValueBox({
-    valueBox(
-      paste0("Week's ", param),
-      1,
-      color = colors_param[param],
-      icon = icon("balance-scale-right")
-    )
-  })
-  output$mean_month <- renderValueBox({
-    valueBox(
-      paste0("Month's ", param),
-      1,
-      color = colors_param[param],
-      icon = icon("balance-scale-right")
-    )
-  })
 
+  # Data ----
+  counts <- reactive({data.frame(mean_today = 1, mean_week = 2, mean_month = 3)})
+
+  # Boxes ----
+  callModule(mod_caseBoxes_server, "mean_today", counts)
+  callModule(mod_caseBoxes_server, "mean_week", counts)
+  callModule(mod_caseBoxes_server, "mean_month", counts)
+
+  # Plot ----
   output$plot_output <- renderPlot(
     ggplot(data, aes(x = time, y = param)) +
       geom_line() +
       geom_point()
   )
 
-  output$table_output <- renderDataTable(data)
+  # Table ----
+  output$table_output <- renderDataTable(data())
 
   output$downloadCsv <- downloadHandler(
     filename = function() {
@@ -88,10 +74,3 @@ mod_single_measure_module_server <- function(input, output, session, param, data
   )
 
 }
-
-## To be copied in the UI
-# mod_single_measure_module_ui("single_measure_module_ui_1")
-
-## To be copied in the server
-# callModule(mod_single_measure_module_server, "single_measure_module_ui_1")
-

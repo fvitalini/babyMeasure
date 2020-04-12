@@ -8,26 +8,43 @@
 #' @importFrom stats time
 #' @noRd
 app_server <- function(input, output, session) {
-  dataset_name <- "fagiolina.rds"
-  # List the first level callModules here
-  callModule(mod_single_measure_module_server, "single_measure_module_ui_weight", param = "weight", data = data_reactive())
-  callModule(mod_single_measure_module_server, "single_measure_module_ui_length", param = "length", data = data_reactive())
-  callModule(mod_single_measure_module_server, "single_measure_module_ui_temperature", param = "temperature", data = data_reactive())
+  # path to save data
+  dataset_name <- system.file(file.path("data_tracking", "fagiolina.rds"), package = "babyMeasure")
+
+  # define data_reactive
+  data_reactive <- reactive({
+    if (file.exists(dataset_name)) {
+      data <- readRDS(dataset_name)
+    } else {
+      data <- NULL
+    }
+    data
+  })
+
 
   observeEvent(input$submit, {
     # New data
     new_data <- data.frame(time = Sys.time(), weight = input$weight, temperature = input$temperature, length = input$length)
 
-    # load data
-    if (file.exists(dataset_name)) {
-      data <- readRDS(dataset_name) %>%
+    # append data
+    if (!is.null(data_reactive())) {
+      data <- data_reactive() %>%
         bind_rows(new_data)
     } else {
       data <- new_data
     }
 
+    # save data
     saveRDS(data, dataset_name)
+
+    #return reactive
     data_reactive <- reactive(data)
   })
+
+  # List the first level callModules here
+  callModule(mod_single_measure_module_server, "single_measure_module_weight", param = "weight", data = data_reactive())
+  callModule(mod_single_measure_module_server, "single_measure_module_length", param = "length", data = data_reactive())
+  callModule(mod_single_measure_module_server, "single_measure_module_temperature", param = "temperature", data = data_reactive())
+  callModule(mod_journal_server, "mod_journal")
 
 }

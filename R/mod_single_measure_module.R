@@ -23,13 +23,13 @@ mod_single_measure_module_ui <- function(id, param) {
       shinydashboard::box(
         width = 8, solidHeader = TRUE,
         title = "Time evolution",
-        status = colors_param_status[param],
+        status = colors_param_status[[param]],
         plotOutput("plot_output", width = "100%", height = 600)
       ),
       shinydashboard::box(
         width = 4,
         title = "Data",
-        status = colors_param_status[param],
+        status = colors_param_status[[param]],
         tableOutput(ns("table_output")),
         downloadButton(ns("downloadCsv"), "Download as CSV")
       )
@@ -40,6 +40,8 @@ mod_single_measure_module_ui <- function(id, param) {
 #' single_measure_module Server Function
 #' @param param type of measure: weight, temperature, length
 #' @param data reactive dataset. as dataframe
+#' @import shiny
+#' @import shinydashboard
 #' @importFrom stats time
 #' @importFrom utils write.csv
 #' @noRd

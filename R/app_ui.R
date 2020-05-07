@@ -1,7 +1,6 @@
 #' The application User-Interface
 #'
 #' @param request Internal parameter for `{shiny}`.
-#'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinydashboard
 #' @noRd
@@ -13,24 +12,25 @@ app_ui <- function(request) {
     dashboardPage(
       dashboardHeader(title = "babyMeasure"),
       dashboardSidebar(
-        numericInput(inputId = "weight", label = "Weight", min = 0, value = 0),
-        numericInput(inputId = "temperature", label = "Temperature", min = 0, value = 0),
-        numericInput(inputId = "length", label = "Length", min = 0, value = 0),
-        textAreaInput(inputId = "comment", label = "Journal", height = "150px"),
-        actionButton(inputId = "submit", label = "Submit", style = "margin:10%")
+        numericInput(inputId = "num_weight", label = "Weight", min = 0, value = 0),
+        numericInput(inputId = "num_temperature", label = "Temperature", min = 0, value = 0),
+        numericInput(inputId = "num_length", label = "Length", min = 0, value = 0),
+        textAreaInput(inputId = "num_comment", label = "Journal", height = "150px"),
+        actionButton(inputId = "abtn_submit", label = "Submit", style = "margin:10%")
       ),
       dashboardBody(
         tabsetPanel(
           tabPanel(title = "Weight",
-                   mod_single_measure_module_ui("single_measure_module_ui_weight", param = "weight")
+                   mod_single_measure_module_ui("single_measure_module_weight", param = "weight")
           ),
           tabPanel(title = "Temperature",
-                   mod_single_measure_module_ui("single_measure_module_ui_temperature", param = "temperature")
+                   mod_single_measure_module_ui("single_measure_module_temperature", param = "temperature")
           ),
           tabPanel(title = "Length",
-                   mod_single_measure_module_ui("single_measure_module_ui_length", param = "length")
+                   mod_single_measure_module_ui("single_measure_module_length", param = "length")
           ),
           tabPanel("Journal",
+                   mod_journal_ui("journal")
           )
         )
       )

@@ -8,6 +8,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @import shiny
 #' @import shinydashboard
 #' @import ggplot2
 mod_single_measure_module_ui <- function(id, param) {
@@ -24,13 +25,13 @@ mod_single_measure_module_ui <- function(id, param) {
       box(
         width = 8, solidHeader = TRUE,
         title = "Time evolution",
-        status = colors_param_status[param],
+        status = colors_param_status[[param]],
         plotOutput("plot_output", width = "100%", height = 600)
       ),
       box(
         width = 4,
         title = "Data",
-        status = colors_param_status[param],
+        status = colors_param_status[[param]],
         tableOutput(ns("table_output")),
         downloadButton(ns("downloadCsv"), "Download as CSV")
       )
@@ -40,6 +41,8 @@ mod_single_measure_module_ui <- function(id, param) {
 
 #' single_measure_module Server Function
 #' @param data reactive dataset. as dataframe
+#' @import shiny
+#' @import shinydashboard
 #' @importFrom stats time
 #' @importFrom utils write.csv
 #' @noRd
@@ -47,26 +50,23 @@ mod_single_measure_module_server <- function(input, output, session, param, data
   ns <- session$ns
   output$mean_today <- renderValueBox({
     valueBox(
-      paste0("Today's ", param),
-      1,
-      color = colors_param_status[param],
-      icon = icon("balance-scale-right")
+      value = paste0("Today's ", param),
+      subtitle = 1,
+      color = colors_param[[param]]
     )
   })
   output$mean_week <- renderValueBox({
     valueBox(
-      paste0("Week's ", param),
-      1,
-      color = colors_param_status[param],
-      icon = icon("balance-scale-right")
+      value = paste0("Week's ", param),
+      subtitle = 1,
+      color = colors_param[[param]]
     )
   })
   output$mean_month <- renderValueBox({
     valueBox(
-      paste0("Month's ", param),
-      1,
-      color = colors_param_status[param],
-      icon = icon("balance-scale-right")
+      value = paste0("Month's ", param),
+      subtitle = 1,
+      color = colors_param[[param]]
     )
   })
 

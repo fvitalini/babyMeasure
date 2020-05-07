@@ -16,9 +16,9 @@ not_na <- Negate(is.na)
 #' @noRd
 #'
 colors_param <- list(
-  weight = "#00c0ef",
-  temperature = "#f39c12",
-  length = "#00a65a"
+  weight = "aqua", #"#00c0ef",
+  temperature = "orange",#"#f39c12",
+  length = "green"#"#00a65a"
 )
 
 #' Global variables

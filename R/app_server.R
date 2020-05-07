@@ -1,30 +1,41 @@
 #' The application server-side
 #'
 #' @param input,output,session Internal parameters for {shiny}.
-#'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinydashboard
 #' @import dplyr
 #' @importFrom stats time
 #' @noRd
 app_server <- function(input, output, session) {
+
+  shiny::observe({
+    print(input$num_weight)
+  })
+
   # path to save data
-  dataset_name <- system.file(file.path("data_tracking", "fagiolina.rds"), package = "babyMeasure")
+  dataset_name <- file.path("inst","data_tracking", "fagiolina.rds")
 
   # define data_reactive
   data_reactive <- reactive({
     if (file.exists(dataset_name)) {
       data <- readRDS(dataset_name)
     } else {
-      data <- NULL
+      # data <- NULL
+      data <- reactive({
+        data.frame(
+          time = rep(Sys.time(), 4), weight = sample.int(1000, 4), temperature = sample.int(1000, 4), length = sample.int(1000, 4)
+        )
+      })
     }
     data
   })
 
 
-  observeEvent(input$submit, {
+  observeEvent(input$abtn_submit, {
+    print("submit")
+
     # New data
-    new_data <- data.frame(time = Sys.time(), weight = input$weight, temperature = input$temperature, length = input$length)
+    new_data <- data.frame(time = Sys.time(), weight = input$num_weight, temperature = input$num_temperature, length = input$num_length)
 
     # append data
     if (!is.null(data_reactive())) {
